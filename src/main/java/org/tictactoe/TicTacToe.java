@@ -5,25 +5,25 @@ import java.util.*;
 public class TicTacToe
 {
     final private char[][] board;
+    final private int n;
 
     /// @param board The game board
     public TicTacToe(char[][] board)
     {
         // Assume board is valid
         this.board = board;
+        n = this.board.length;
     }
 
     /// Checks the board for a winner
     ///
-    /// Checks 4 corners, by row, by column, by diagonals, and by 2x2 square
-    /// The 2x2 square is assumed to be of a fixed spot similar to Sudoku style boxes
+    /// Checks by 4 corners, by row, by column, by diagonals, and by 2x2 square
     ///
     /// @return The winner of the game or null if no winner
     public char checkWinner()
     {
         // Check the four corners have the same value and return the value
         // Use n so this can be expanded to nxn board
-        int n = board.length;
         if (board[0][0] != '-' && (board[0][0] == board[0][n - 1]) &&
                 (board[0][n - 1] == board[n - 1][n - 1]) &&
                 (board[n - 1][n - 1] == board[n - 1][0]))
@@ -36,8 +36,6 @@ public class TicTacToe
         Map<Integer, int[]> cols = new HashMap<>();
         // use 1 for LR diagonal and 2 for RL diagonal
         Map<Integer, int[]> diagonals = new HashMap<>();
-        // Assume 2x2 is sudoku style for now
-        Map<Integer, int[]> boxes = new HashMap<>();
 
         for (int row = 0; row < n; row++)
         {
@@ -51,21 +49,47 @@ public class TicTacToe
                 {
                     cols.put(col, new int[2]);
                 }
+
                 // If it's an x or o and not a -
                 if (isTaken(row, col))
                 {
                     int index = board[row][col] == 'x' ? 0 : 1;
+                    // Check the row and column
                     (rows.get(row))[index]++;
                     (cols.get(col))[index]++;
 
-                    // Is there a way to make the box index more generic?
-                    int boxIndex = (row / 2) * 2 + col / 2;
-                    if (!boxes.containsKey(boxIndex))
+                    // If we found n in a row, we don't need to check the rest of the board
+                    if ((rows.get(row))[index] == n || (cols.get(col))[index] == n)
                     {
-                        boxes.put(boxIndex, new int[2]);
+                        return board[row][col];
                     }
-                    (boxes.get(boxIndex))[index]++;
 
+                    // Check the 2x2 box
+                    // We don't need to check the last row and col because that is out of bounds/redundant
+                    if (row < n - 1 && col < n - 1)
+                    {
+                        // Can also do this in way similar to checking the four corners such as
+                        // if (board[row][col] == board[row + 1][col] && board[row + 1][col]...)
+                        int[][] directions = new int[][]{{1, 0}, {0, 1}, {1, 1}};
+                        boolean isMatch = true;
+                        char match = board[row][col];
+                        for (int[] direction : directions)
+                        {
+                            if (match != board[row + direction[0]][col + direction[1]])
+                            {
+                                isMatch = false;
+                                break;
+                            }
+                        }
+
+                        // If there's a winner we don't need to check the rest of the board
+                        if (isMatch)
+                        {
+                            return board[row][col];
+                        }
+                    }
+
+                    // Check the diagonal
                     if (row == col)
                     {
                         if (!diagonals.containsKey(1))
@@ -73,7 +97,14 @@ public class TicTacToe
                             diagonals.put(1, new int[2]);
                         }
                         (diagonals.get(1))[index]++;
+
+                        // If we found n in a row, we don't need to check the rest of the board
+                        if ((diagonals.get(1))[index] == n)
+                        {
+                            return board[row][col];
+                        }
                     }
+                    // Check the other diagonal
                     else if (row + col == board.length - 1)
                     {
                         if (!diagonals.containsKey(2))
@@ -81,56 +112,14 @@ public class TicTacToe
                             diagonals.put(2, new int[2]);
                         }
                         (diagonals.get(2))[index]++;
+
+                        // If we found n in a row, we don't need to check the rest of the board
+                        if ((diagonals.get(2))[index] == n)
+                        {
+                            return board[row][col];
+                        }
                     }
                 }
-            }
-        }
-
-        for (int[] row : rows.values())
-        {
-            if (row[0] == 4)
-            {
-                return 'x';
-            }
-            else if (row[1] == 4)
-            {
-                return 'o';
-            }
-        }
-
-        for (int[] col : cols.values())
-        {
-            if (col[0] == 4)
-            {
-                return 'x';
-            }
-            else if (col[1] == 4)
-            {
-                return 'o';
-            }
-        }
-
-        for (int[] diagonal : diagonals.values())
-        {
-            if (diagonal[0] == 4)
-            {
-                return 'x';
-            }
-            else if (diagonal[1] == 4)
-            {
-                return 'o';
-            }
-        }
-
-        for (int[] box : boxes.values())
-        {
-            if (box[0] == 4)
-            {
-                return 'x';
-            }
-            else if (box[1] == 4)
-            {
-                return 'o';
             }
         }
 
@@ -138,8 +127,8 @@ public class TicTacToe
         return '\0';
     }
 
-    /// @param row
-    /// @param col
+    /// @param row The row that is being checked
+    /// @param col The col that is being checked
     /// @return If the queried spot has been played
     private boolean isTaken(int row, int col)
     {
@@ -160,7 +149,7 @@ public class TicTacToe
                 }
             }
         }
-        // If didn't find an unplayed spots return false
+        // If no unplayed spots return false
         return false;
     }
 

@@ -61,9 +61,9 @@ public class TicTacToeTests {
     };
 
     char[][] box = {
+            {'x', 'o', 'o', 'x'},
             {'-', 'o', 'o', '-'},
-            {'-', 'o', 'o', '-'},
-            {'x', 'x', '-', '-'},
+            {'-', '-', '-', '-'},
             {'x', 'x', '-', '-'},
     };
 
@@ -148,7 +148,7 @@ public class TicTacToeTests {
     @Test
     void checkBox() {
         TicTacToe ttt = new TicTacToe(box);
-        assertEquals('x', ttt.checkWinner());
+        assertEquals('o', ttt.checkWinner());
         assertTrue(ttt.isMoveRemaining());
         assertTrue(ttt.isGameOver());
     }
