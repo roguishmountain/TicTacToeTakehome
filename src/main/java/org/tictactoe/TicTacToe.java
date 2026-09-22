@@ -24,7 +24,7 @@ public class TicTacToe
     {
         // Check the four corners have the same value and return the value
         // Use n so this can be expanded to nxn board
-        if (board[0][0] != '-' && (board[0][0] == board[0][n - 1]) &&
+        if (isTaken(0, 0) && (board[0][0] == board[0][n - 1]) &&
                 (board[0][n - 1] == board[n - 1][n - 1]) &&
                 (board[n - 1][n - 1] == board[n - 1][0]))
         {
@@ -58,7 +58,7 @@ public class TicTacToe
                     (rows.get(row))[index]++;
                     (cols.get(col))[index]++;
 
-                    // If we found n in a row, we don't need to check the rest of the board
+                    // If we found n in a row/col, we don't need to check the rest of the board
                     if ((rows.get(row))[index] == n || (cols.get(col))[index] == n)
                     {
                         return board[row][col];
@@ -98,7 +98,7 @@ public class TicTacToe
                         }
                         (diagonals.get(1))[index]++;
 
-                        // If we found n in a row, we don't need to check the rest of the board
+                        // If we found n in a diagonal, we don't need to check the rest of the board
                         if ((diagonals.get(1))[index] == n)
                         {
                             return board[row][col];
@@ -113,7 +113,7 @@ public class TicTacToe
                         }
                         (diagonals.get(2))[index]++;
 
-                        // If we found n in a row, we don't need to check the rest of the board
+                        // If we found n in a diagonal, we don't need to check the rest of the board
                         if ((diagonals.get(2))[index] == n)
                         {
                             return board[row][col];
