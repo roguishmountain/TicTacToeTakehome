@@ -39,20 +39,21 @@ public class TicTacToe
 
         for (int row = 0; row < n; row++)
         {
-            if (!rows.containsKey(row))
-            {
-                rows.put(row, new int[2]);
-            }
             for (int col = 0; col < n; col++)
             {
-                if (!cols.containsKey(col))
-                {
-                    cols.put(col, new int[2]);
-                }
-
                 // If it's an x or o and not a -
                 if (isTaken(row, col))
                 {
+                    if (!cols.containsKey(col))
+                    {
+                        cols.put(col, new int[2]);
+                    }
+
+                    if (!rows.containsKey(row))
+                    {
+                        rows.put(row, new int[2]);
+                    }
+
                     int index = board[row][col] == 'x' ? 0 : 1;
                     // Check the row and column
                     (rows.get(row))[index]++;
@@ -105,7 +106,7 @@ public class TicTacToe
                         }
                     }
                     // Check the other diagonal
-                    else if (row + col == board.length - 1)
+                    if (row + col == n - 1)
                     {
                         if (!diagonals.containsKey(2))
                         {
@@ -139,9 +140,9 @@ public class TicTacToe
     public boolean isMoveRemaining()
     {
         // Iterate over board and check for '-' which indicates unplayed spot
-        for (int row = 0; row < this.board.length; row++)
+        for (int row = 0; row < n; row++)
         {
-            for (int col = 0; col < this.board[0].length; col++)
+            for (int col = 0; col < n; col++)
             {
                 if (this.board[row][col] == '-')
                 {
