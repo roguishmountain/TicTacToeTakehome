@@ -68,17 +68,17 @@ public class TicTacToeTests {
     };
 
     char[][] box2 = {
-            {'-', '-', 'o', 'o'},
-            {'-', '-', 'o', 'o'},
-            {'x', '-', 'x', '-'},
+            {'-', '-', 'x', '-'},
             {'-', '-', '-', 'x'},
+            {'x', '-', 'o', 'o'},
+            {'-', '-', 'o', 'o'},
     };
 
     char[][] inProgress = {
             {'x', '-', '-', '-'},
-            {'-', '-', '-', '-'},
+            {'x', '-', 'o', '-'},
+            {'x', '-', 'o', '-'},
             {'-', '-', 'o', '-'},
-            {'-', '-', '-', '-'},
     };
 
     @Test
@@ -124,7 +124,7 @@ public class TicTacToeTests {
     @Test
     void checkStalemate() {
         TicTacToe ttt = new TicTacToe(stalemate);
-        assertEquals('\0', ttt.checkWinner());
+        assertEquals(null, ttt.checkWinner());
         assertFalse(ttt.isMoveRemaining());
         assertTrue(ttt.isGameOver());
     }
@@ -164,7 +164,7 @@ public class TicTacToeTests {
     @Test
     void checkInProgress() {
         TicTacToe ttt = new TicTacToe(inProgress);
-        assertEquals('\0', ttt.checkWinner());
+        assertEquals(null, ttt.checkWinner());
         assertTrue(ttt.isMoveRemaining());
         assertFalse(ttt.isGameOver());
     }

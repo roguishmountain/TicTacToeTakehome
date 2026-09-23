@@ -6,6 +6,7 @@ public class TicTacToe
 {
     final private char[][] board;
     final private int n;
+    final private int[][] directions = new int[][]{{1, 0}, {0, 1}, {1, 1}};
 
     /// @param board The game board
     public TicTacToe(char[][] board)
@@ -20,10 +21,9 @@ public class TicTacToe
     /// Checks by 4 corners, by row, by column, by diagonals, and by 2x2 square
     ///
     /// @return The winner of the game or null if no winner
-    public char checkWinner()
+    public Character checkWinner()
     {
         // Check the four corners have the same value and return the value
-        // Use n so this can be expanded to nxn board
         if (isTaken(0, 0) && (board[0][0] == board[0][n - 1]) &&
                 (board[0][n - 1] == board[n - 1][n - 1]) &&
                 (board[n - 1][n - 1] == board[n - 1][0]))
@@ -31,7 +31,7 @@ public class TicTacToe
             return board[0][0];
         }
 
-        // arr[0] = x, arr[1] = 0
+        // arr[0] = x, arr[1] = o
         Map<Integer, int[]> rows = new HashMap<>();
         Map<Integer, int[]> cols = new HashMap<>();
         // use 1 for LR diagonal and 2 for RL diagonal
@@ -71,7 +71,6 @@ public class TicTacToe
                     {
                         // Can also do this in way similar to checking the four corners such as
                         // if (board[row][col] == board[row + 1][col] && board[row + 1][col]...)
-                        int[][] directions = new int[][]{{1, 0}, {0, 1}, {1, 1}};
                         boolean isMatch = true;
                         char match = board[row][col];
                         for (int[] direction : directions)
@@ -125,7 +124,7 @@ public class TicTacToe
         }
 
         // If there was no winner, return null
-        return '\0';
+        return null;
     }
 
     /// @param row The row that is being checked
@@ -158,6 +157,6 @@ public class TicTacToe
     public boolean isGameOver()
     {
         // If there's a winner or if there's no moves left, game is over
-        return checkWinner() != '\0' || !isMoveRemaining();
+        return checkWinner() != null || !isMoveRemaining();
     }
 }
